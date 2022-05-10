@@ -2,8 +2,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const form = document.querySelector('form');
   const list = document.querySelector('#list');
   form.addEventListener('submit', buildTask);
-  list.addEventListener('click', removeTask);
   list.addEventListener('click', editTask);
+  list.addEventListener('click', removeTask);
 });
 
 function buildTask(event) {
@@ -15,20 +15,12 @@ function buildTask(event) {
   li.textContent = event.target.new_todo.value;
   tasks.appendChild(li);
 
-  //'generateButtons' function is invoked and return value appended to 'li' element
+  //'generateButtons' function is invoked and return value(a 'div' containing the buttons) is appended to 'li' element
   li.appendChild(createButtons());
   //Reset input field after submit
   document.querySelector('form').reset();
 };
   
-
-function removeTask(event) {
-  if (event.target.className === 'delete-btn') {
-    const li = event.target.parentNode.parentNode; //target li element which is the parent node of the div in which the buttons are contained
-    li.remove();
-  }
-};
-
 function editTask(event) {
   event.preventDefault();
   if (event.target.className === 'edit-btn') {
@@ -37,11 +29,19 @@ function editTask(event) {
   document.querySelector('#submit_change')
           .addEventListener('click', (event) => {
             const input = document.getElementById('input_field').value;
-            const li = event.target.parentNode.parentNode.parentNode
+            const li = event.target.parentNode.parentNode.parentNode;
             li.textContent = input;
             li.appendChild(createButtons());
          })
 };
+
+function removeTask(event) {
+  if (event.target.className === 'delete-btn') {
+    const li = event.target.parentNode.parentNode; //target li element which is the parent node of the div in which the buttons are contained
+    li.remove();
+  }
+};
+
 
 const createButtons = function() {
   const div = document.createElement('div');
@@ -56,8 +56,12 @@ const createButtons = function() {
   editButton.className = 'edit-btn';
   editButton.textContent = 'edit';
   editButton.style.padding = '5px';
+  //Create 'priority' dropdown
+  const select = document.createElement('select');
+  const options = ['--Priority--', 'High', 'Medium', 'Low'];
+  options.forEach((option, value) => select[value] = new Option(option, value))
   //Append buttons to div, then append div to li.
-  div.append(editButton, deleteButton)
+  div.append(select, editButton, deleteButton)
   div.style.display = 'inline-block';
   div.style.paddingLeft = '10px';
   return div;
@@ -80,7 +84,7 @@ const createEditForm = function(event) {
     submitButton.setAttribute('id', 'submit_change');
     submitButton.type = 'submit';
     submitButton.name = 'submit_button'
-    submitButton.value = 'submit change';
+    submitButton.value = 'submit';
     //Create button to cancel changes
     const cancelButton = document.createElement('input');
     cancelButton.setAttribute('id', 'cancel-change');
