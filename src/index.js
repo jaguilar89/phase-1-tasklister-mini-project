@@ -15,7 +15,35 @@ function buildTask(event) {
   li.textContent = event.target.new_todo.value;
   tasks.appendChild(li);
 
-  //Create div for buttons.
+  //'generateButtons' function is invoked and return value appended to 'li' element
+  li.appendChild(createButtons());
+  //Reset input field after submit
+  document.querySelector('form').reset();
+};
+  
+
+function removeTask(event) {
+  if (event.target.className === 'delete-btn') {
+    const li = event.target.parentNode.parentNode; //target li element which is the parent node of the div in which the buttons are contained
+    li.remove();
+  }
+};
+
+function editTask(event) {
+  event.preventDefault();
+  if (event.target.className === 'edit-btn') {
+    createEditForm(event);
+  }
+  document.querySelector('#submit_change')
+          .addEventListener('click', (event) => {
+            const input = document.getElementById('input_field').value;
+            const li = event.target.parentNode.parentNode.parentNode
+            li.textContent = input;
+            li.appendChild(createButtons());
+         })
+};
+
+const createButtons = function() {
   const div = document.createElement('div');
   div.className = 'buttons';
   //Create 'remove' button;
@@ -32,23 +60,11 @@ function buildTask(event) {
   div.append(editButton, deleteButton)
   div.style.display = 'inline-block';
   div.style.paddingLeft = '10px';
-  li.appendChild(div);
-  //Reset input field after submit
-  document.querySelector('form').reset();
-}
-  
+  return div;
+};
 
-function removeTask(event) {
-  if (event.target.className === 'delete-btn') {
-    const li = event.target.parentNode.parentNode; //target li element which is the parent node of the div in which the buttons are contained
-    li.remove();
-  }
-}
-
-function editTask(event) {
-  event.preventDefault();
-  if (event.target.className === 'edit-btn') {
-    const targetItem = event.target;
+const createEditForm = function(event) {
+  const targetItem = event.target;
     //Create form element
     const form = document.createElement('form');
     form.setAttribute('id', 'edit-task');
@@ -64,7 +80,7 @@ function editTask(event) {
     submitButton.setAttribute('id', 'submit_change');
     submitButton.type = 'submit';
     submitButton.name = 'submit_button'
-    submitButton.textContent = 'submit change';
+    submitButton.value = 'submit change';
     //Create button to cancel changes
     const cancelButton = document.createElement('input');
     cancelButton.setAttribute('id', 'cancel-change');
@@ -73,11 +89,5 @@ function editTask(event) {
     cancelButton.value = 'cancel';
     //Append buttons to form
     form.append(inputField, submitButton, cancelButton);
-    targetItem.parentNode.replaceWith(form);
-
-    document.querySelector('#edit-task')
-            .addEventListener('submit', () => {
-              console.log(document.getElementById('input_field').value);
-            }, false)
-  }
-}
+    targetItem.parentNode.replaceChildren(form);
+};
