@@ -11,10 +11,9 @@ function buildTask(event) {
   //Create li element for the submitted task.
   const tasks = document.querySelector('#tasks');
   const li = document.createElement('li');
-  li.className = 'task'
+  li.className = 'task';
   li.textContent = event.target.new_todo.value;
   tasks.appendChild(li);
-
   //'generateButtons' function is invoked and return value(a 'div' containing the buttons) is appended to 'li' element
   li.appendChild(createButtons());
   //Reset input field after submit
@@ -33,6 +32,12 @@ function editTask(event) {
             li.textContent = input;
             li.appendChild(createButtons());
          })
+  document.querySelector('#cancel-change')
+          .addEventListener('click', (event) => {
+            const targetItem = event.target;
+            const buttonsDiv = targetItem.parentNode.parentNode;
+            buttonsDiv.replaceWith(createButtons()); //regenerate div with original task options
+          })
 };
 
 function removeTask(event) {
@@ -95,3 +100,5 @@ const createEditForm = function(event) {
     form.append(inputField, submitButton, cancelButton);
     targetItem.parentNode.replaceChildren(form);
 };
+
+//TODO: Work on sorting functionality for tasks...
