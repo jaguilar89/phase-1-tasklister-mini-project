@@ -48,7 +48,7 @@ function removeTask(event) {
 };
 
 
-const createButtons = function() {
+function createButtons() {
   const div = document.createElement('div');
   div.className = 'buttons';
   //Create 'remove' button;
@@ -63,6 +63,7 @@ const createButtons = function() {
   editButton.style.padding = '5px';
   //Create 'priority' dropdown
   const select = document.createElement('select');
+  select.setAttribute('class', 'priority-dropdown');
   const options = ['--Priority--', 'High', 'Medium', 'Low'];
   options.forEach((option, value) => select[value] = new Option(option, value))
   //Append buttons to div, then append div to li.
@@ -72,7 +73,7 @@ const createButtons = function() {
   return div;
 };
 
-const createEditForm = function(event) {
+function createEditForm(event) {
   const targetItem = event.target;
     //Create form element
     const form = document.createElement('form');
@@ -101,4 +102,5 @@ const createEditForm = function(event) {
     targetItem.parentNode.replaceChildren(form);
 };
 
-//TODO: Work on sorting functionality for tasks...
+
+
